@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -10,16 +9,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import ProductCard from './ProductCard/ProductCard';
 
 
@@ -58,7 +50,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const { classes,  order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -67,12 +59,7 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell >
-          {/*<Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          />*/}
+          
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -110,67 +97,6 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const useToolbarStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
-  title: {
-    flex: '1 1 100%',
-  },
-}));
-
-const EnhancedTableToolbar = (props) => {
-  const classes = useToolbarStyles();
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-     /* className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}*/
-    >
-      {/*numSelected > 0 ? (
-        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        {<Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          
-      </Typography>}
-      )*/}
-
-      {/*numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )*/}
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -196,11 +122,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EnhancedTable(data) {
+  //cargo la data 
   let rows = Array.from(data.data)
-  //console.log('data array from')
-  //console.log(Array.from(data.data));
-  //console.log('rows');
-  //console.log(rows);
+  
 
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -208,22 +132,14 @@ export default function EnhancedTable(data) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-  /*
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };*/
+ 
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -258,14 +174,14 @@ export default function EnhancedTable(data) {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        
         <TableContainer>
           <Table
             className={classes.table}
@@ -278,7 +194,7 @@ export default function EnhancedTable(data) {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              /*onSelectAllClick={handleSelectAllClick}*/
+              
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
@@ -292,20 +208,15 @@ export default function EnhancedTable(data) {
                   row.carbs = row.available_quantity;
                   row.protein = row.id;
 
-                  /*const isItemSelected = isSelected(row.name);*/
+                  
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    
-                      
-                    <ProductCard row ={row} id={row.id} title={row.title}
+                    <ProductCard key={row.id} row ={row}
                       hover
                       onClick={(event) => handleClick(event, row.name)}
                       id={labelId}
                     />
-                      
-                    
-                    
                   );
                 })}
               {emptyRows > 0 && (
@@ -317,7 +228,7 @@ export default function EnhancedTable(data) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 20, 30]}
+          rowsPerPageOptions={[5, 20, 30]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

@@ -2,9 +2,7 @@ var axios = require ('axios');
 var express = require('express');
 var app = express ();
 var mcache = require('memory-cache');
-
-
-
+const port = 3002;
 
 var cache = (duration) => {
     console.log('inicio cache')
@@ -65,10 +63,15 @@ const parseItemList = data => {
   return itemList;
 };
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); 
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.get('/', cache(10), (req, res) => {
   const query = req.query.q;
-  console.log('viene la query');
+  console.log('llego la query con valor:');
   console.log(req.query.q);
   
   return axios
@@ -82,4 +85,6 @@ app.get('/', cache(10), (req, res) => {
     });
 });
   
-app.listen(3002);
+app.listen(port, () => {
+  console.log(`listening at http://localhost:${port}`)
+})
