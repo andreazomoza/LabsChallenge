@@ -4,9 +4,7 @@ var app = express ();
 var mcache = require('memory-cache');
 
 
-const API_URL = 'https://api.mercadolibre.com';
-const ITEMS = '/items';
-const SITES = '/sites';
+
 
 var cache = (duration) => {
     console.log('inicio cache')
@@ -67,23 +65,6 @@ const parseItemList = data => {
   return itemList;
 };
 
-
-app.get('/id', cache(10), (req, res) => {
-  const query = req.query.q;
-  console.log('viene la query search by id');
-  console.log(query);
-  
-  return axios
-    
-    .get(`https://api.mercadolibre.com/items/MLA821677367`)
-    .then(response => {
-      res.json(response);
-      console.log(resonse.data.responsults)
-    })
-    .catch(error => {
-      console.log(error.message);
-    });
-});
 
 app.get('/', cache(10), (req, res) => {
   const query = req.query.q;

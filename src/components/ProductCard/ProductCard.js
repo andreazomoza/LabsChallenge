@@ -1,62 +1,26 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { getData } from '../../redux/actions/index';
-import { getProductDetail } from '../../redux/actions/index';
-import './ProductCard.css';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 
-class ProductCard extends React.Component {
-
-    componentDidMount() {
-        const { match: { params: { id }}} = this.props;
-        this.props.getProductDetail(id)
-        console.log("ID DE COMPONENTE PROD");
-        console.log(id);
-        
-     }
-
-    truncate(str, num) {
-        const string = str ? str : ''
-        if (string.length <= num) {
-          return string
-        }
-        return string.slice(0, num) + '...'
-      }
+export default function ProductCard ({row}) {
+    return (
       
+        <TableRow
+            tabIndex={-1}
+            key={row.name} 
+        >
+                      
+            <TableCell padding="checkbox">
+            </TableCell>
+            <TableCell component="th"  scope="row" padding="none">
+            <img width="110" src={row.thumbnail}/>{row.name}
+            </TableCell>
+            <TableCell align="right">${row.calories}</TableCell>
+            <TableCell align="right">{row.fat}</TableCell>
+            <TableCell align="right">{row.carbs}</TableCell>
+            <TableCell align="right">{row.protein}</TableCell>
+                      
+        </TableRow>
       
-
-    render() {
-        
-        const { title, id} = this.props.product
-        
-        return (
-            <div>
-
-                <h1>soy componente Product Card</h1>
-                <h2>{title}</h2>
-                
-                
-                {this.props.product.attributes && this.props.product.attributes.map((el, i) => (
-                
-                <div key={i} onClick={this.handleButton}>
-                {el.name}:{el.value_name}
-                </div>))}
-                
-                    
-                
-            </div>
-        );
-    };
-}
-
-const mapStateToProps = state => {
-    return {
-        product: state.productDetail
-      };
-}
-const mapDispatchToProps = dispatch => {
-    return {
-        getProductDetail: (id) => dispatch(getProductDetail(id))
-    }
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(ProductCard);
+    );
+};
