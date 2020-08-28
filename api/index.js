@@ -69,7 +69,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/', cache(10), (req, res) => {
+app.get('/api/search', cache(10), (req, res) => {
   const query = req.query.q;
   console.log('llego la query con valor:');
   console.log(req.query.q);
